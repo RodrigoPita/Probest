@@ -26,9 +26,14 @@ def posicao( t:int ) -> list:
     da particula'''
     
     if ( t == 0 ):
-        return t, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] # inicializando os vertices do poligono com a particula na posicao inicial
+        return [t, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]] # inicializando os vertices do poligono com a particula na posicao inicial
 
     sinal = randint( 0, 1 )
     if ( sinal ):
         return [t, shiftR( posicao( t - 1 )[1] )]
-    return [t, shiftL( posicao( t - 1 ) )[1]]
+    return [t, shiftL( posicao( t - 1 )[1] )]
+
+def main():
+    print( posicao( 7 ) )
+
+main()
