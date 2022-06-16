@@ -20,20 +20,23 @@ def shiftL( L:list ) -> list:
 
 # Questao 1
 
-def posicao( t:int ) -> list:
+def posicao( t:int, L:list ) -> list:
     '''Calcula a posicao de uma particula em relacao aos vertices do poligono p
     depois de passados t segundos, retornando uma nova lista com a posicao atual
     da particula'''
-    
+    auxL = [] + L # lista para registrar quais vertices ja foram percorridos
     if ( t == 0 ):
         return [t, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]] # inicializando os vertices do poligono com a particula na posicao inicial
 
-    sinal = randint( 0, 1 )
-    if ( sinal ):
-        return [t, shiftR( posicao( t - 1 )[1] )]
-    return [t, shiftL( posicao( t - 1 )[1] )]
+    for i in range( t ):
+        sinal = randint( 0, 1 ) # variavel para indicar em qual sentido a particula vai se mover
+        if ( sinal ): L = shiftR( L )
+        else: L = shiftL( L )
+        auxI = L.index( 1 )
+        if auxL[auxI] != 1: auxL[auxI] = 1
+        if ( 0 not in auxL ): return( i )
 
 def main():
-    print( posicao( 7 ) )
+    print( posicao( 7, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ) )
 
 main()
