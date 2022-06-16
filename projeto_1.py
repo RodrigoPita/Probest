@@ -20,23 +20,42 @@ def shiftL( L:list ) -> list:
 
 # Questao 1
 
-def posicao( t:int, L:list ) -> list:
+def posicao( t:int, L:list ) -> int or tuple:
     '''Calcula a posicao de uma particula em relacao aos vertices do poligono p
     depois de passados t segundos, retornando uma nova lista com a posicao atual
     da particula'''
-    auxL = [] + L # lista para registrar quais vertices ja foram percorridos
-    if ( t == 0 ):
-        return [t, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]] # inicializando os vertices do poligono com a particula na posicao inicial
+    
+    # lista auxiliar para registrar quais vertices ja foram percorridos
+    auxL = [] + L
 
     for i in range( t ):
-        sinal = randint( 0, 1 ) # variavel para indicar em qual sentido a particula vai se mover
+        # variavel para indicar em qual sentido a particula vai se mover
+        sinal = randint( 0, 1 )
+
+        # caso o sinal seja 1, a particula anda no sentido horario
         if ( sinal ): L = shiftR( L )
+        # caso o sinal seja 0, a a particula anda no sentido anti-horario
         else: L = shiftL( L )
-        auxI = L.index( 1 )
-        if auxL[auxI] != 1: auxL[auxI] = 1
+
+        # posicao atual da particula
+        pos = L.index( 1 )
+
+        # se a particula estiver num vertice novo pela primeira vez, o vertice fica registrado na lista auxiliar
+        if auxL[pos] != 1: auxL[pos] = 1
+
+        # se todos os vertices tiverem sido visitados, retorna o tempo em que isso ocorreu
         if ( 0 not in auxL ): return( i )
+    return (L, auxL)
 
 def main():
-    print( posicao( 7, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ) )
+    # lista dos vertices com a particula na posicao inicial
+    L = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
+    # numero de testes
+    n = 100
+    
+    # lista de testes para quantos passos a particula leva ate visitar todos os vertices
+    testes = [ posicao( 1000, L ) for i in range( n ) ]
+
+    print( testes )
 main()
