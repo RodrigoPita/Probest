@@ -20,7 +20,7 @@ def shiftL( L:list ) -> list:
 
 # Questao 1
 
-def posicao( t:int, L:list ) -> int or tuple:
+def posicao( t:int, L:list ) -> list:
     '''Calcula a posicao de uma particula em relacao aos vertices do poligono p
     depois de passados t segundos, retornando uma nova lista com a posicao atual
     da particula'''
@@ -44,18 +44,20 @@ def posicao( t:int, L:list ) -> int or tuple:
         if auxL[pos] != 1: auxL[pos] = 1
 
         # se todos os vertices tiverem sido visitados, retorna o tempo em que isso ocorreu
-        if ( 0 not in auxL ): return( i )
-    return (L, auxL)
+        if ( 0 not in auxL ): return [L, i]
+    return L
 
 def main():
     # lista dos vertices com a particula na posicao inicial
     L = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     # numero de testes
-    n = 100
+    n = 5000
     
-    # lista de testes para quantos passos a particula leva ate visitar todos os vertices
-    testes = [ posicao( 1000, L ) for i in range( n ) ]
+    # lista de testes para quantos passos a particula leva ate visitar todos os vertices, ou seja, lista de Y
+    testes = [ posicao( 10000, L )[1] for i in range( n ) ]
 
-    print( testes )
+    # E[Y]
+    espY = sum( testes ) / len( testes )
+    print( f'O valor de E[Y] = {espY}' )
 main()
