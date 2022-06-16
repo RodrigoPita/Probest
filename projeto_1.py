@@ -42,7 +42,7 @@ def posicao( t:int, L:list ) -> list:
         pos = L.index( 1 )
 
         # se a particula estiver num vertice novo pela primeira vez, o vertice fica registrado na lista auxiliar
-        if ( auxL[pos] != 1: auxL[pos] ) = 1
+        if ( auxL[pos] != 1 ): auxL[pos] = 1
 
         # se todos os vertices tiverem sido visitados, retorna o tempo em que isso ocorreu
         if ( 0 not in auxL ): return [L, i]
