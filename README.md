@@ -1,2 +1,4 @@
 # Probest
-UFRJ_BCC_2022.1
+Disciplina de Estatística e Probabilidade
+
+Professor: Hugo Carvalho
