@@ -1,31 +1,31 @@
 # bibliotecas complementares
 from random import randint
 
+# constante para simular infinitas iteracoes
+TAM = 1000000
+
 # funcoes complementares
 def shiftR( L:list ) -> list:
     '''Recebe uma lista L e faz um shift de seus elementos para a direita
     ex. shiftR( [1, 2, 3] ) -> [3, 1, 2]'''
     
-    if len( L ) <= 1:
-        return L
+    if ( len( L ) <= 1 ): return L
     return [L[-1]] + L[:-1]
 
 def shiftL( L:list ) -> list:
     '''Recebe uma lista L e faz um shift de seus elementos para a esquerda
     ex. shiftL( [1, 2, 3] ) -> [2, 3, 1]'''
     
-    if len( L ) <= 1:
-        return L
+    if ( len( L ) <= 1 ): return L
     return L[1:] + [L[0]]
 
 # Questao 1
-
-def posicao( t:int, L:list ) -> list:
+def posicao( t:int = TAM, L:list = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ) -> list:
     '''Calcula a posicao de uma particula em relacao aos vertices do poligono p
     depois de passados t segundos, retornando uma nova lista com a posicao atual
     da particula ou uma lista com essa mesma nova lista e o tempo, caso todos
     os vertices tenham sido visitados'''
-    
+   
     # lista auxiliar para registrar quais vertices ja foram percorridos
     auxL = [] + L
 
@@ -56,6 +56,7 @@ def caso( s:str ) -> int:
     2 -> direita
     3 -> baixo
     '''
+
     # caso em que o inseto se encontra na posicao superior central do tabuleiro
     if ( s == '01' ):
         aux = [0, 2, 3]
@@ -89,21 +90,41 @@ def caso( s:str ) -> int:
 
 def imprimeTabuleiro( M:list ) -> None:
     '''Imprime o tabuleiro M em forma de matriz'''
+
+    # imprime a borda superior do tabuleiro
     print( '\n' + '-'*13 )
     for i in M:
+        # imprime as linhas do tabuleiro
         print( f'| {i[0]} | {i[1]} | {i[2]} |')
+    # imprime a borta inferior do tabuleiro
     print( '-'*13 + '\n' )
 
-def iteraSalto( M:list, trajeto:list ) -> list:
+def iteraSalto( M:list, trajeto:list = [] ) -> list:
     '''Entra num loop de iteracoes da funcao salto ate que o inseto caia na armadilha'''
+
+    # inicializando variaveis auxiliares para nao alterar os valores originais
     auxM, auxTrajeto = [] + M, [] + trajeto
-    while True:
+    while ( True ):
         auxM, auxTrajeto = salto( auxM, auxTrajeto )
-        # print( trajeto )
-        if auxTrajeto[-1] == 'armadilha': break
+        # quebra o loop caso o inseto seja capturado
+        if ( auxTrajeto[-1] == 'armadilha' ): break
     return [ auxM, auxTrajeto ]
 
-def salto( M:list, trajeto = []) -> list:
+def iteraSalto2( M:list, trajeto:list = [], count:int = 0 ) -> list:
+    '''Faz o mesmo que a funcao iteraSalto, mas tambem registra o numero count de vezes
+    que o inseto visita a casa central'''
+
+    # inicializando variaveis auxiliares para nao alterar os valores originais
+    auxM, auxTrajeto, auxCount = [] + M, [] + trajeto, count
+    while ( True ):
+        auxM, auxTrajeto = salto( auxM, auxTrajeto )
+        # incrementa a conta caso haja visita a casa central
+        if ( auxM[1][1] == 1 ): auxCount += 1
+        # quebra o loop caso o inseto seja capturado
+        if ( auxTrajeto[-1] == 'armadilha' ): break
+    return [ auxM, auxTrajeto, auxCount ]
+
+def salto( M:list, trajeto:list = []) -> list:
     '''Calcula a posicao de um inseto num tabuleiro M após um salto'''
 
     # dicionario para legenda das direcoes
@@ -115,11 +136,13 @@ def salto( M:list, trajeto = []) -> list:
 
     # o inseto ja se encontra numa armadilha
     if ( M[0][0] == 1 or M[2][2] == 1 ):
-        if ( legenda[4] not in trajeto ): trajeto.append( legenda[4] ) # fecha a lista do trajeto
+        # fecha a lista do trajeto
+        if ( legenda[4] not in trajeto ): trajeto.append( legenda[4] )
         return [ M, trajeto ]
-    for i in range(3):
+
+    for i in range( 3 ):
         if ( 1 not in M[i] ): continue # pula a iteracao, caso o inseto nao esteja na linha i do tabuleiro
-        for j in range(3):
+        for j in range( 3 ):
             # se o inseto estiver na posicao Mij do tabuleiro
             if ( M[i][j] == 1 ):
                 # chama a funcao auxiliar caso para escolher a direcao do movimento do inseto
@@ -144,18 +167,17 @@ def salto( M:list, trajeto = []) -> list:
                 return [ M, trajeto ]
 
 def main():
-    # lista dos vertices com a particula na posicao inicial
-    L = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
     # numero de testes
-    n = 50000
+    n1 = 5000
+    n2 = 10000
     
     # lista de testes para quantos passos a particula leva ate visitar todos os vertices, ou seja, lista de Y
-    q1Testes = [ posicao( 10000, L )[1] for i in range( n ) ]
+    q1Testes = [ posicao()[1] for i in range( n1 ) ]
 
     # E[Y]
     espY = sum( q1Testes ) / len( q1Testes )
-    print( f'O valor de E[Y] = {espY}' )
+
+    print( f'O valor de E[Y] = {espY}\n' )
 
     # tabuleiro com o inseto na posicao inicial
     caso_01 = [ [0, 1, 0], [0, 0, 0], [0, 0, 0] ]
@@ -166,17 +188,14 @@ def main():
     caso_20 = [ [0, 0, 0], [0, 0, 0], [1, 0, 0] ]
     caso_21 = [ [0, 0, 0], [0, 0, 0], [0, 1, 0] ]
     
-    # lista para registrar o trajeto percorrido pelo inseto ate uma armadilha
-    trajeto = []
-    
     # listas com os testes para cada caso de posicao inicial do inseto
-    t01 = [ len( iteraSalto( caso_01, trajeto )[1] ) for i in range( n ) ]
-    t02 = [ len( iteraSalto( caso_02, trajeto )[1] ) for i in range( n ) ]
-    t10 = [ len( iteraSalto( caso_10, trajeto )[1] ) for i in range( n ) ]
-    t11 = [ len( iteraSalto( caso_11, trajeto )[1] ) for i in range( n ) ]
-    t12 = [ len( iteraSalto( caso_12, trajeto )[1] ) for i in range( n ) ]
-    t20 = [ len( iteraSalto( caso_20, trajeto )[1] ) for i in range( n ) ]
-    t21 = [ len( iteraSalto( caso_21, trajeto )[1] ) for i in range( n ) ]
+    t01 = [ len( iteraSalto( caso_01 )[1] ) for i in range( n2 ) ]
+    t02 = [ len( iteraSalto( caso_02 )[1] ) for i in range( n2 ) ]
+    t10 = [ len( iteraSalto( caso_10 )[1] ) for i in range( n2 ) ]
+    t11 = [ len( iteraSalto( caso_11 )[1] ) for i in range( n2 ) ]
+    t12 = [ len( iteraSalto( caso_12 )[1] ) for i in range( n2 ) ]
+    t20 = [ len( iteraSalto( caso_20 )[1] ) for i in range( n2 ) ]
+    t21 = [ len( iteraSalto( caso_21 )[1] ) for i in range( n2 ) ]
 
     # media de saltos do inseto, para cada caso, ate que ele chegue numa armadilha
     media01 = sum( t01 ) / len( t01 )
@@ -195,4 +214,12 @@ def main():
                 f'-Caso 12: {media12}\n ' +
                 f'-Caso 20: {media20}\n ' +
                 f'-Caso 21: {media21}\n' )
+    
+    # lista de testes para a posicao inferior esquerda, considerando o numero de visitas a casa central
+    t20_2 = [ iteraSalto2( caso_20 )[2] for i in range( n2 ) ]
+    
+    # media de vezes que o inseto visita a casa central antes de ser capturado
+    media20_2 = sum( t20_2 ) / len( t20_2 )
+
+    print( f'O inseto, em média, visita o centro {media20_2} vezes antes de ser capturado')
 main()
