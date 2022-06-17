@@ -89,10 +89,10 @@ def caso( s:str ) -> int:
 
 def imprimeTabuleiro( M:list ) -> None:
     '''Imprime o tabuleiro M em forma de matriz'''
-    print() # quebra de linha
+    print( '\n' + '-'*13 )
     for i in M:
         print( f'| {i[0]} | {i[1]} | {i[2]} |')
-    print() # quebra de linha
+    print( '-'*13 + '\n' )
 
 def salto( M:list, trajeto = []) -> list:
     '''Calcula a posicao de um inseto num tabuleiro M após um salto'''
