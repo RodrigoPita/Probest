@@ -94,6 +94,13 @@ def imprimeTabuleiro( M:list ) -> None:
         print( f'| {i[0]} | {i[1]} | {i[2]} |')
     print( '-'*13 + '\n' )
 
+def iteraSalto( M:list, trajeto:list ) -> list:
+    while True:
+        M, trajeto = salto( M, trajeto )
+        print( trajeto )
+        if trajeto[-1] == 'armadilha': break
+    return [ M, trajeto ]
+
 def salto( M:list, trajeto = []) -> list:
     '''Calcula a posicao de um inseto num tabuleiro M após um salto'''
 
@@ -150,13 +157,7 @@ def main():
 
     # tabuleiro com o inseto na posicao inicial
     M = [ [0, 0, 0], [0, 1, 0], [0, 0, 0] ]
-    imprimeTabuleiro( M )
-    M, trajeto = salto( M )
-    imprimeTabuleiro( M )
-    M, trajeto = salto( M, trajeto )
-    imprimeTabuleiro( M )
-    M, trajeto = salto( M, trajeto )
-    imprimeTabuleiro( M )
-    print( trajeto )
+    trajeto = []
+    M, trajeto = iteraSalto( M, trajeto )
 
 main()
