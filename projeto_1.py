@@ -95,11 +95,13 @@ def imprimeTabuleiro( M:list ) -> None:
     print( '-'*13 + '\n' )
 
 def iteraSalto( M:list, trajeto:list ) -> list:
+    '''Entra num loop de iteracoes da funcao salto ate que o inseto caia na armadilha'''
+    auxM, auxTrajeto = [] + M, [] + trajeto
     while True:
-        M, trajeto = salto( M, trajeto )
-        print( trajeto )
-        if trajeto[-1] == 'armadilha': break
-    return [ M, trajeto ]
+        auxM, auxTrajeto = salto( auxM, auxTrajeto )
+        # print( trajeto )
+        if auxTrajeto[-1] == 'armadilha': break
+    return [ auxM, auxTrajeto ]
 
 def salto( M:list, trajeto = []) -> list:
     '''Calcula a posicao de um inseto num tabuleiro M após um salto'''
@@ -146,18 +148,51 @@ def main():
     L = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     # numero de testes
-    n = 5000
+    n = 50000
     
     # lista de testes para quantos passos a particula leva ate visitar todos os vertices, ou seja, lista de Y
-    testes = [ posicao( 10000, L )[1] for i in range( n ) ]
+    q1Testes = [ posicao( 10000, L )[1] for i in range( n ) ]
 
     # E[Y]
-    espY = sum( testes ) / len( testes )
+    espY = sum( q1Testes ) / len( q1Testes )
     print( f'O valor de E[Y] = {espY}' )
 
     # tabuleiro com o inseto na posicao inicial
-    M = [ [0, 0, 0], [0, 1, 0], [0, 0, 0] ]
+    caso_01 = [ [0, 1, 0], [0, 0, 0], [0, 0, 0] ]
+    caso_02 = [ [0, 0, 1], [0, 0, 0], [0, 0, 0] ]
+    caso_10 = [ [0, 0, 0], [1, 0, 0], [0, 0, 0] ]
+    caso_11 = [ [0, 0, 0], [0, 1, 0], [0, 0, 0] ]
+    caso_12 = [ [0, 0, 0], [0, 0, 1], [0, 0, 0] ]
+    caso_20 = [ [0, 0, 0], [0, 0, 0], [1, 0, 0] ]
+    caso_21 = [ [0, 0, 0], [0, 0, 0], [0, 1, 0] ]
+    
+    # lista para registrar o trajeto percorrido pelo inseto ate uma armadilha
     trajeto = []
-    M, trajeto = iteraSalto( M, trajeto )
+    
+    # listas com os testes para cada caso de posicao inicial do inseto
+    t01 = [ len( iteraSalto( caso_01, trajeto )[1] ) for i in range( n ) ]
+    t02 = [ len( iteraSalto( caso_02, trajeto )[1] ) for i in range( n ) ]
+    t10 = [ len( iteraSalto( caso_10, trajeto )[1] ) for i in range( n ) ]
+    t11 = [ len( iteraSalto( caso_11, trajeto )[1] ) for i in range( n ) ]
+    t12 = [ len( iteraSalto( caso_12, trajeto )[1] ) for i in range( n ) ]
+    t20 = [ len( iteraSalto( caso_20, trajeto )[1] ) for i in range( n ) ]
+    t21 = [ len( iteraSalto( caso_21, trajeto )[1] ) for i in range( n ) ]
 
+    # media de saltos do inseto, para cada caso, ate que ele chegue numa armadilha
+    media01 = sum( t01 ) / len( t01 )
+    media02 = sum( t02 ) / len( t02 )
+    media10 = sum( t10 ) / len( t10 )
+    media11 = sum( t11 ) / len( t11 )
+    media12 = sum( t12 ) / len( t12 )
+    media20 = sum( t20 ) / len( t20 )
+    media21 = sum( t21 ) / len( t21 )
+
+    print( f' Médias de saltos são:\n ' +
+                f'-Caso 01: {media01}\n ' +
+                f'-Caso 02: {media02}\n ' +
+                f'-Caso 10: {media10}\n ' +
+                f'-Caso 11: {media11}\n ' +
+                f'-Caso 12: {media12}\n ' +
+                f'-Caso 20: {media20}\n ' +
+                f'-Caso 21: {media21}\n' )
 main()
