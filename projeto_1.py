@@ -2,7 +2,7 @@
 from random import randint
 
 # constante para simular infinitas iteracoes
-TAM = 1000000
+TAM = 5000000
 
 # funcoes complementares
 def shiftR( L:list ) -> list:
@@ -20,7 +20,7 @@ def shiftL( L:list ) -> list:
     return L[1:] + [L[0]]
 
 # Questao 1
-def posicao( t:int = TAM, L:list = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ) -> list:
+def posicao( inf:bool = False, t:int = TAM, L:list = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ) -> list:
     '''Calcula a posicao de uma particula em relacao aos vertices do poligono p
     depois de passados t segundos, retornando uma nova lista com a posicao atual
     da particula ou uma lista com essa mesma nova lista e o tempo, caso todos
@@ -42,11 +42,12 @@ def posicao( t:int = TAM, L:list = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ) -> lis
         pos = L.index( 1 )
 
         # se a particula estiver num vertice novo pela primeira vez, o vertice fica registrado na lista auxiliar
-        if ( auxL[pos] != 1 ): auxL[pos] = 1
+        if ( auxL[pos] < 1 ): auxL[pos] = 1
+        else: auxL[pos] += 1 # caso a particula esteja revisitando o vertice, incrementamos o numero de visitas
 
         # se todos os vertices tiverem sido visitados, retorna o tempo em que isso ocorreu
-        if ( 0 not in auxL ): return [L, i]
-    return L
+        if ( 0 not in auxL and not inf ): return [ L, i ]
+    return [ auxL, t ]
 
 # Questao 2
 def caso( s:str ) -> int:
@@ -174,10 +175,19 @@ def main():
     # lista de testes para quantos passos a particula leva ate visitar todos os vertices, ou seja, lista de Y
     q1Testes = [ posicao()[1] for i in range( n1 ) ]
 
-    # E[Y]
+    # 1.b) E[Y]
     espY = sum( q1Testes ) / len( q1Testes )
 
     print( f'O valor de E[Y] = {espY}\n' )
+
+    # 1.d) chamar posicao() depois de um tempo TAM suficientemente grande
+    Z, tempoTotal = posicao( True )
+
+    print( f'A massa de probabilidade da variável Z se dá por:' )
+    for i in range( len( Z ) ):
+        # calculando a probabilidade da particula estar em cada vertice
+        aux = round( Z[i] / tempoTotal * 100, 2 )
+        print( f' -Vertice {i}: {aux} %' )
 
     # tabuleiro com o inseto na posicao inicial
     caso_01 = [ [0, 1, 0], [0, 0, 0], [0, 0, 0] ]
@@ -197,7 +207,7 @@ def main():
     t20 = [ len( iteraSalto( caso_20 )[1] ) for i in range( n2 ) ]
     t21 = [ len( iteraSalto( caso_21 )[1] ) for i in range( n2 ) ]
 
-    # media de saltos do inseto, para cada caso, ate que ele chegue numa armadilha
+    # 2.d) media de saltos do inseto, para cada caso, ate que ele chegue numa armadilha
     media01 = sum( t01 ) / len( t01 )
     media02 = sum( t02 ) / len( t02 )
     media10 = sum( t10 ) / len( t10 )
@@ -206,7 +216,7 @@ def main():
     media20 = sum( t20 ) / len( t20 )
     media21 = sum( t21 ) / len( t21 )
 
-    print( f' Médias de saltos são:\n ' +
+    print( f'\nMédias de saltos são:\n ' +
                 f'-Caso 01: {media01}\n ' +
                 f'-Caso 02: {media02}\n ' +
                 f'-Caso 10: {media10}\n ' +
@@ -215,7 +225,7 @@ def main():
                 f'-Caso 20: {media20}\n ' +
                 f'-Caso 21: {media21}\n' )
     
-    # lista de testes para a posicao inferior esquerda, considerando o numero de visitas a casa central
+    # 2.e) lista de testes para a posicao inferior esquerda, considerando o numero de visitas a casa central
     t20_2 = [ iteraSalto2( caso_20 )[2] for i in range( n2 ) ]
     
     # media de vezes que o inseto visita a casa central antes de ser capturado
@@ -223,3 +233,7 @@ def main():
 
     print( f'O inseto, em média, visita o centro {media20_2} vezes antes de ser capturado')
 main()
+
+## Usar a Lei fraca dos Grandes Numeros para o item c da questao 1
+## Calcular a quantidade de vezes que a particula passa por cada estado dividida pelo total, para o item d da questao 1
+## item c da 2 analogo ao item b da 1
