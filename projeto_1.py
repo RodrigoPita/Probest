@@ -8,14 +8,12 @@ TAM = 5000000
 def shiftR( L:list ) -> list:
     '''Recebe uma lista L e faz um shift de seus elementos para a direita
     ex. shiftR( [1, 2, 3] ) -> [3, 1, 2]'''
-    
     if ( len( L ) <= 1 ): return L
     return [L[-1]] + L[:-1]
 
 def shiftL( L:list ) -> list:
     '''Recebe uma lista L e faz um shift de seus elementos para a esquerda
     ex. shiftL( [1, 2, 3] ) -> [2, 3, 1]'''
-    
     if ( len( L ) <= 1 ): return L
     return L[1:] + [L[0]]
 
@@ -25,7 +23,6 @@ def posicao( inf:bool = False, t:int = TAM, L:list = [1, 0, 0, 0, 0, 0, 0, 0, 0,
     depois de passados t segundos, retornando uma nova lista com a posicao atual
     da particula ou uma lista com essa mesma nova lista e o tempo, caso todos
     os vertices tenham sido visitados'''
-   
     # lista auxiliar para registrar quais vertices ja foram percorridos
     auxL = [] + L
 
@@ -57,7 +54,6 @@ def caso( s:str ) -> int:
     2 -> direita
     3 -> baixo
     '''
-
     # caso em que o inseto se encontra na posicao superior central do tabuleiro
     if ( s == '01' ):
         aux = [0, 2, 3]
@@ -91,7 +87,6 @@ def caso( s:str ) -> int:
 
 def imprimeTabuleiro( M:list ) -> None:
     '''Imprime o tabuleiro M em forma de matriz'''
-
     # imprime a borda superior do tabuleiro
     print( '\n' + '-'*13 )
     for i in M:
@@ -102,7 +97,6 @@ def imprimeTabuleiro( M:list ) -> None:
 
 def iteraSalto( M:list, trajeto:list = [] ) -> list:
     '''Entra num loop de iteracoes da funcao salto ate que o inseto caia na armadilha'''
-
     # inicializando variaveis auxiliares para nao alterar os valores originais
     auxM, auxTrajeto = [] + M, [] + trajeto
     while ( True ):
@@ -114,7 +108,6 @@ def iteraSalto( M:list, trajeto:list = [] ) -> list:
 def iteraSalto2( M:list, trajeto:list = [], count:int = 0 ) -> list:
     '''Faz o mesmo que a funcao iteraSalto, mas tambem registra o numero count de vezes
     que o inseto visita a casa central'''
-
     # inicializando variaveis auxiliares para nao alterar os valores originais
     auxM, auxTrajeto, auxCount = [] + M, [] + trajeto, count
     while ( True ):
@@ -139,12 +132,8 @@ def probabilidadeArmadilhas( casos:list ) -> list:
     # retornando uma lista com a probabilidade arredondada da captura de cada armadilha
     return [ round( contagemArmadilhas[0] * 100 / total, 2 ), round( contagemArmadilhas[1] * 100 / total, 2 ) ]
 
-
-
-
 def salto( M:list, trajeto:list = []) -> list:
     '''Calcula a posicao de um inseto num tabuleiro M após um salto'''
-
     # dicionario para legenda das direcoes
     legenda = { 0: 'esquerda',
                 1: 'cima',
@@ -221,16 +210,7 @@ def main():
     caso_20 = [ [0, 0, 0], [0, 0, 0], [1, 0, 0] ]
     caso_21 = [ [0, 0, 0], [0, 0, 0], [0, 1, 0] ]
 
-    # testes do numero de saltos ate a armadilha para cada caso de posicao inicial do inseto
-    t01 = [ len( iteraSalto( caso_01 )[1] ) for i in range( n2 ) ]
-    t02 = [ len( iteraSalto( caso_02 )[1] ) for i in range( n2 ) ]
-    t10 = [ len( iteraSalto( caso_10 )[1] ) for i in range( n2 ) ]
-    t11 = [ len( iteraSalto( caso_11 )[1] ) for i in range( n2 ) ]
-    t12 = [ len( iteraSalto( caso_12 )[1] ) for i in range( n2 ) ]
-    t20 = [ len( iteraSalto( caso_20 )[1] ) for i in range( n2 ) ]
-    t21 = [ len( iteraSalto( caso_21 )[1] ) for i in range( n2 ) ]
-
-    # testes com os trajetos ate a armadilha, especificando qual das duas armadilhas
+    # 2.c) testes com os trajetos ate a armadilha, especificando qual das duas armadilhas
     armadilhas_01 = [ iteraSalto( caso_01 )[1] for i in range( n2 ) ]
     armadilhas_02 = [ iteraSalto( caso_02 )[1] for i in range( n2 ) ]
     armadilhas_10 = [ iteraSalto( caso_10 )[1] for i in range( n2 ) ]
@@ -239,7 +219,7 @@ def main():
     armadilhas_20 = [ iteraSalto( caso_20 )[1] for i in range( n2 ) ]
     armadilhas_21 = [ iteraSalto( caso_21 )[1] for i in range( n2 ) ]
     
-    # 2.c) probabilidades de o inseto ser capturado por cada uma das armadilhas para cada caso
+    # probabilidades de o inseto ser capturado por cada uma das armadilhas para cada caso
     probs_armadilhas_01 = probabilidadeArmadilhas( armadilhas_01 )
     probs_armadilhas_02 = probabilidadeArmadilhas( armadilhas_02 )
     probs_armadilhas_10 = probabilidadeArmadilhas( armadilhas_10 )
@@ -262,7 +242,16 @@ def main():
         print( f' -Caso {i[1]}:' )
         for j in i[0]: print( f'  -Armadilha {i[0].index( j ) + 1}: {j} %' )
 
-    # 2.d) media de saltos do inseto, para cada caso, ate que ele chegue numa armadilha
+    # 2.d) testes do numero de saltos ate a armadilha para cada caso de posicao inicial do inseto
+    t01 = [ len( iteraSalto( caso_01 )[1] ) for i in range( n2 ) ]
+    t02 = [ len( iteraSalto( caso_02 )[1] ) for i in range( n2 ) ]
+    t10 = [ len( iteraSalto( caso_10 )[1] ) for i in range( n2 ) ]
+    t11 = [ len( iteraSalto( caso_11 )[1] ) for i in range( n2 ) ]
+    t12 = [ len( iteraSalto( caso_12 )[1] ) for i in range( n2 ) ]
+    t20 = [ len( iteraSalto( caso_20 )[1] ) for i in range( n2 ) ]
+    t21 = [ len( iteraSalto( caso_21 )[1] ) for i in range( n2 ) ]
+
+    # media de saltos do inseto, para cada caso, ate que ele chegue numa armadilha
     media01 = sum( t01 ) / len( t01 )
     media02 = sum( t02 ) / len( t02 )
     media10 = sum( t10 ) / len( t10 )
@@ -272,13 +261,13 @@ def main():
     media21 = sum( t21 ) / len( t21 )
 
     print( f'\nMédias de saltos são:\n ' +
-                f'-Caso 01: {media01}\n ' +
-                f'-Caso 02: {media02}\n ' +
-                f'-Caso 10: {media10}\n ' +
-                f'-Caso 11: {media11}\n ' +
-                f'-Caso 12: {media12}\n ' +
-                f'-Caso 20: {media20}\n ' +
-                f'-Caso 21: {media21}\n' )
+           f'-Caso 01: {media01}\n ' +
+           f'-Caso 02: {media02}\n ' +
+           f'-Caso 10: {media10}\n ' +
+           f'-Caso 11: {media11}\n ' +
+           f'-Caso 12: {media12}\n ' +
+           f'-Caso 20: {media20}\n ' +
+           f'-Caso 21: {media21}\n' )
     
     # 2.e) lista de testes para a posicao inferior esquerda, considerando o numero de visitas a casa central
     t20_2 = [ iteraSalto2( caso_20 )[2] for i in range( n2 ) ]
@@ -287,8 +276,5 @@ def main():
     media20_2 = sum( t20_2 ) / len( t20_2 )
 
     print( f'O inseto, em média, visita o centro {media20_2} vezes antes de ser capturado.')
-main()
 
-## Usar a Lei fraca dos Grandes Numeros para o item c da questao 1
-## Calcular a quantidade de vezes que a particula passa por cada estado dividida pelo total, para o item d da questao 1
-## item c da 2 analogo ao item b da 1
+main()
