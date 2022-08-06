@@ -2,7 +2,6 @@
 import io
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy import special
 
 FILE_NAME = 'zipf.txt'
 
@@ -15,8 +14,8 @@ def get_data_from_file( file_name:str ) -> list:
 
 def format_string( string:str ) -> str:
     '''Formata uma string, tirando todos os simbolos sem ser carateres do alfabeto padrao'''
-    formated_string = string.strip().replace( ',', '' ).replace( '.', '' ).replace( ';', '' ).replace( '(', '' ).replace( ')', '' ).replace( ':', '' ).replace( '\n', '' )
-    return formated_string.lower()
+    formated_string = string.strip().replace( ',', '' ).replace( '.', '' ).replace( ';', '' ).lower()
+    return formated_string.replace( '(', '' ).replace( ')', '' ).replace( ':', '' ).replace( '\n', '' )
 
 def count_frequency( text:str ) -> dict:
     '''Conta a frequencia de ocorrencias de cada palavra num texto,
@@ -33,18 +32,12 @@ def plot_frequencies( freqs:dict ) -> None:
     '''Plota um grafico de acordo com as frequencias do dicionario dado'''
     aux = list( freqs.items() )
     elements = sorted( aux, key = lambda x: x[1], reverse = True )
-    
-    # parametro da distribuicao de Zipf
-    a = 2.
-
     words = [ element[0] for element in elements ]
     occurences = [ element[1] for element in elements ]
     x_pos = np.arange( len( words ) )
-    x = np.arange( 1., 50. )
-    y = x**( -a ) / special.zetac( a )
     
     plt.title( 'Distribuição de Zipf no Projeto' )
-    # plt.plot( x, y, linewidth = 2, color = 'r' )
+    plt.plot( x_pos, occurences, linewidth = 2, color = 'r' )
     plt.bar( x_pos, occurences, align = 'center' )
     plt.xlabel( 'Palavras' )
     plt.ylabel( 'Ocorrências' )
