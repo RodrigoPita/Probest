@@ -6,7 +6,7 @@ import scipy.stats
 import math
 
 FILE_NAME = 'zipf.txt'
-TAM = 100000
+TAM = 1000000
 
 def get_data_from_file( file_name:str ) -> list:
     '''Abre um arquivo e coloca todo o seu conteudo em uma string'''
@@ -48,10 +48,9 @@ def plot_frequencies( freqs:dict ) -> None:
 
 def list_of_Ys( const:int ) -> list:
     '''Cria uma lista de variaveis aleatorias Y'''
-    Y = []
-    for i in range( const ):
-        yi = scipy.stats.norm.rvs( 0, 1 )
-        if ( yi > 0 and yi < 1/20 ): Y.append( yi )
+    low = 0
+    high = 1/20
+    Y = np.random.uniform( low, high, size = const )
     return Y
 
 def mean_y( Y:list ) -> float:
