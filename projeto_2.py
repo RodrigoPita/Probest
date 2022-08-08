@@ -84,6 +84,6 @@ def main():
     Ys = list_of_Ys( TAM )
     E_y = mean_y( Ys )
     E_g = mean_g( Ys )
-    print( f' -E[Y] = {E_y}\n -E[g(y)] = {E_g}')
+    print( f' -> E[Y] = {E_y}\n -> E[g(y)] = {E_g}')
 
 main()
