@@ -2,8 +2,11 @@
 import io
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.stats
+import math
 
 FILE_NAME = 'zipf.txt'
+TAM = 100000
 
 def get_data_from_file( file_name:str ) -> list:
     '''Abre um arquivo e coloca todo o seu conteudo em uma string'''
@@ -43,10 +46,44 @@ def plot_frequencies( freqs:dict ) -> None:
     plt.ylabel( 'Ocorrências' )
     plt.show()
 
+def list_of_Ys( const:int ) -> list:
+    '''Cria uma lista de variaveis aleatorias Y'''
+    Y = []
+    for i in range( const ):
+        yi = scipy.stats.norm.rvs( 0, 1 )
+        if ( yi > 0 and yi < 1/20 ): Y.append( yi )
+    return Y
+
+def mean_y( Y:list ) -> float:
+    '''Valor esperado de Y'''
+    n = len( Y )
+    mean = sum( Y ) / n
+    return mean
+
+def g( y:float ) -> float:
+    '''Funcao g(y)'''
+    ans = 1 / ( 20 * ( y ** 2 ) * math.sqrt( 2 * math.pi ) ) * ( math.e ** ( -1 / ( 2 * y ** ( 2 ) ) ) )
+    return ans
+
+def mean_g( Y:list ) -> float:
+    '''Valor esperado de g'''
+    G = []
+    for yi in Y:
+        gi = g( yi )
+        G.append( gi )
+    n = len( G )
+    mean = sum( G ) / n
+    return mean
+
 def main():
-    text = get_data_from_file( FILE_NAME )
-    formated_text = format_string( text )
-    frequencies = count_frequency( formated_text )
-    plot_frequencies( frequencies )
+    # text = get_data_from_file( FILE_NAME )
+    # formated_text = format_string( text )
+    # frequencies = count_frequency( formated_text )
+    # plot_frequencies( frequencies )
+
+    Ys = list_of_Ys( TAM )
+    E_y = mean_y( Ys )
+    E_g = mean_g( Ys )
+    print( E_y, E_g )
 
 main()
