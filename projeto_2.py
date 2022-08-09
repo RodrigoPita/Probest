@@ -7,6 +7,7 @@ import math
 
 FILE_NAME = 'zipf.txt'
 TAM = 100000
+TAM2 = 1000
 
 def get_data_from_file( file_name:str ) -> list:
     '''Abre um arquivo e coloca todo o seu conteudo em uma string'''
@@ -48,10 +49,9 @@ def plot_frequencies( freqs:dict ) -> None:
 
 def list_of_Ys( const:int ) -> list:
     '''Cria uma lista de variaveis aleatorias Y'''
-    Y = []
-    for i in range( const ):
-        yi = scipy.stats.norm.rvs( 0, 1 )
-        if ( yi > 0 and yi < 1/20 ): Y.append( yi )
+    low = 0
+    high = 1/20
+    Y = np.random.uniform( low, high, size = const )
     return Y
 
 def mean_y( Y:list ) -> float:
@@ -75,15 +75,35 @@ def mean_g( Y:list ) -> float:
     mean = sum( G ) / n
     return mean
 
+def standard_deviation( N:int, X:list, mean:float ) -> float:
+    '''Calcula o desvio padrao de uma populacao, a partir do seu tamanho N, 
+    seus valores X e a sua media mean'''
+    S = 0
+    for xi in X:
+        S += ( xi - mean ) ** 2
+    ans = math.sqrt( S / N )
+    return ans
+
 def main():
+    # Questao 1
     # text = get_data_from_file( FILE_NAME )
     # formated_text = format_string( text )
     # frequencies = count_frequency( formated_text )
     # plot_frequencies( frequencies )
 
+    # Questao 2
+    # c)
     Ys = list_of_Ys( TAM )
     E_y = mean_y( Ys )
     E_g = mean_g( Ys )
     print( f' -> E[Y] = {E_y}\n -> E[g(y)] = {E_g}')
+
+    # d)
+    y_matrix = [ list_of_Ys( TAM ) for i in range( TAM2 ) ]
+    E_gs = [ mean_g( y ) for y in y_matrix ]
+    N = len( E_gs )
+    mean = sum( E_gs ) / N
+    sd_g = standard_deviation( N, E_gs, mean )
+    print( f'\n -> Desvio Padrão = {sd_g}')
 
 main()
